@@ -99,8 +99,12 @@ public class EnergyManager : MonoBehaviour
         if (energy <= 0)
         {
             explosionSource.Play();
-            gameObject.SetActive(false); // TEMP BEHAVIOUR
-			gameManager.CurrentState = GameManager.GameState.GameOver;
+            GetComponent<ParticleSystem>().Play(); // player blows up
+
+            GameObject.Find("PlayerMesh").SetActive(false); // TEMP BEHAVIOUR
+            GetComponent<PolygonCollider2D>().enabled = false;
+
+            gameManager.CurrentState = GameManager.GameState.GameOver;
         }
     }
 
@@ -133,11 +137,6 @@ public class EnergyManager : MonoBehaviour
         {
             collisionSource.Play();
             energy -= collisionCost;
-        }
-        if (energy <= 0)
-        {
-            explosionSource.Play();
-            gameObject.SetActive(false); // TEMP BEHAVIOUR
         }
     }
 

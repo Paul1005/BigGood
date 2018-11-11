@@ -12,9 +12,10 @@ public class AsteroidBehaviour : Poolable, IDamageable
     protected int level;
     private Rigidbody2D rb;
     private AudioSource explosionSound;
-
+    private GameObject asteroidExplosion;
     void Awake ()
     {
+        asteroidExplosion = GameObject.FindGameObjectWithTag("AsteroidExplosion");
         explosionSound = GameObject.Find("ExplosionManager").GetComponents<AudioSource>()[1];
         rb = GetComponent<Rigidbody2D>();
         level = 1;
@@ -32,7 +33,12 @@ public class AsteroidBehaviour : Poolable, IDamageable
         health -= value;
         if (health <= 0)
         {
+            // move explosion to asteroid location and play
+            asteroidExplosion.transform.position = transform.position;
+            asteroidExplosion.GetComponent<ParticleSystem>().Play();
+
             explosionSound.Play();
+
             if (level++ < maxIterations)
             {
                 // reset values of this current asteroid
